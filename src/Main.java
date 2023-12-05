@@ -1,17 +1,19 @@
-// Press Shift twice to open the Search Everywhere dialog and type `show whitespaces`,
-// then press Enter. You can now see whitespace characters in your code.
+import model.PersonClass;
+
 public class Main {
+
     public static void main(String[] args) {
-        // Press Alt+Eingabe with your caret at the highlighted text to see how
-        // IntelliJ IDEA suggests fixing it.
-        System.out.printf("Hello and welcome!");
 
-        // Press Umschalt+F10 or click the green arrow button in the gutter to run the code.
-        for (int i = 1; i <= 5; i++) {
+        // Ein Objekt der PersonClass erstellen und initialisieren
+        PersonClass person = new PersonClass("Beispiel", "Uelis", 1990, 1.75f,70.5f);
 
-            // Press Umschalt+F9 to start debugging your code. We have set one breakpoint
-            // for you, but you can always add more by pressing Strg+F8.
-            System.out.println("i = " + i);
-        }
+        // Attribute ausgeben
+        System.out.println("Vorname: " + person.getFirstName());
+        System.out.println("Nachname: " + person.getLastName());
+        System.out.println("Geburtsjahr: " + person.getYearOfBirth());
+        System.out.println("Grösse: " + person.getSize() + " Meter");
+        System.out.println("Gewicht: " + person.getWeight() + " Kilogramm");
+        System.out.println("Alter: " + person.getAge());
+        System.out.println("Body Mass Index (BMI): " + person.getBodyMassIndex());
     }
 }

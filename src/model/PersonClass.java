@@ -1,16 +1,22 @@
+/**
+ * Die Klasse PersonClass repräsentiert eine Person mit verschiedenen Attributen
+ * wie persönlichen Informationen, Adressdetails und physischen Merkmalen.
+ * Diese Klasse dient als Grundlage für andere Anwendungen, kann aber auch unabhängig verwendet werden.
+ * Sie enthält endgültige Attribute und zwei berechnete Attribute: Alter und Body-Mass-Index (BMI).
+ *
+ * @author Thomas Erny
+ * @version 1.0
+ */
 package model;
 
 /**
- * Anschliessend eine Klasse, um eine Person zu erfassen, grundsätzliche überlegung war es,
- * eine Klasse zu erstellen, die als Grundlage für andere anwendungen dienen kann, aber nicht muss.
- * gemäss Auftrag enthält die Klasse genügen, sinnvolle final Attribute so wie 2 Attribute die innerhalb
- * der Klasse errechnet werden: Alter und BMI.
+ * Repräsentiert eine Person mit persönlichen Informationen, Adressdetails und physischen Merkmalen.
  */
-
 public class PersonClass {
+
+
     /**Attribute: Als final wurden die Werte deklariert, die sich Grundsätzlich nicht mehr ändern sollten.*/
     //region Attribute
-    private final int personalID;
     private final String firstName;
     private String secondName;
     private final String lastName;
@@ -25,9 +31,17 @@ public class PersonClass {
     private float weight;
     private float bodyMassIndex;
     //endregion
-    /**Der Constructor: Wurde auf die Pflichteingaben beschränkt, alles andere kann über setter definiert werden.*/
+
+    /**Der Konstruktor: Wurde auf die Pflichteingaben beschränkt, alles andere kann über setter definiert werden.
+     * @param firstName  Der Vorname der Person.
+     * @param lastName   Der Nachname der Person.
+     * @param yearOfBirth Das Geburtsjahr der Person.
+     * @param size       Die Größe der Person in Metern.
+     * @param weight     Das Gewicht der Person in Kilogramm.
+     * @throws IllegalArgumentException Wenn ungültige Eingaben für Gewicht, Größe oder Geburtsjahr vorliegen.
+     */
     //region Constructor
-    public PersonClass(int personalID, String firstName, String lastName, int yearOfBirth,
+    public PersonClass(String firstName, String lastName, int yearOfBirth,
                        float size, float weight) {
         /**Validierung von grössen und Gewichtseingaben*/
         if(validWeightAndSizeInput(weight, size)) {
@@ -35,8 +49,7 @@ public class PersonClass {
             this.size = size;
         }
         else {
-            throw new IllegalArgumentException("Ungültige Eingabe für Gewicht oder Grösse: " +
-                    weight + ", " + size);
+            exceptionBMI();
         }
 
         /**Validierung von geburtsjahr eingaben*/
@@ -46,18 +59,16 @@ public class PersonClass {
             throw new IllegalArgumentException("Ungültiges Geburtsjahr: " + yearOfBirth);
         }
 
-        this.personalID = personalID;
         this.firstName = firstName;
         this.lastName = lastName;
         this.age = calculateAge();
         this.bodyMassIndex = calculateBMI();
     }
     //endregion
+
+
     /**Getter und Setter: Final Attribute erhalten ausschliesslich eine getter funktion*/
     //region Getter/Setter
-    public int getPersonalID() {
-        return personalID;
-    }
 
     public String getFirstName() {
         return firstName;
@@ -123,7 +134,13 @@ public class PersonClass {
     }
 
     public void setSize(float size) {
-        this.size = size;
+        if (!validWeightAndSizeInput(weight,size)) {
+            exceptionBMI();
+        }
+        else{
+            this.size = size;
+            this.bodyMassIndex = calculateBMI();
+        }
     }
 
     public float getWeight() {
@@ -131,26 +148,54 @@ public class PersonClass {
     }
 
     public void setWeight(float weight) {
-        this.weight = weight;
+        if (!validWeightAndSizeInput(weight,size)) {
+            exceptionBMI();
+        }
+        else{
+            this.weight = weight;
+            this.bodyMassIndex = calculateBMI();
+        }
     }
+
+    public int getAge() {return age;}
+
+    public float getBodyMassIndex() {return bodyMassIndex;}
     //endregion
+
+
     /**Berechnung und sicherheitsabfragen innerhalb der Klasse*/
     //region Klassen Funktionen und SSicherheitsabfragen
+
+    /**@return gibt das errechnete Alter zurück*/
     private int calculateAge() {
             return java.time.Year.now().getValue() - this.yearOfBirth;
     }
 
+    /**@return Gibt den errechneten BMI auf 2 stellen gerundet zurück*/
     private float calculateBMI() {
-            return weight / (size * size);
+        float bmi = weight / (size * size);
+        return (float) (Math.round(bmi * 100.0) / 100.0);
     }
-    private boolean isValidYearOfBirth(int year) {
+
+    /**
+     * @return Prüft die
+     * @param yearOfBirth eingabe auf Plausibilität
+     */
+    private boolean isValidYearOfBirth(int yearOfBirth) {
         int currentYear = java.time.Year.now().getValue();
         int maximumAllowedAge = currentYear - 130;
 
-        return year >= maximumAllowedAge && year <= currentYear;
+        return yearOfBirth >= maximumAllowedAge && yearOfBirth <= currentYear;
     }
+
+    /** @return gibt einen Boolean zurück, welcher bestätigt, ob die eingaben grösser als 0 sind*/
     private boolean validWeightAndSizeInput(double weight, double size) {
-        return weight>0 && size >0;
+        return weight>0 && size>0;
+    }
+
+    /**einfache funktion um von verschiedenen Quellen dieselbe Fehlerausgabe zu erzeugen*/
+    private void exceptionBMI(){
+        throw new IllegalArgumentException("Ungültige Eingabe für Gewicht: " + weight + "oder Grösse: " + size);
     }
     //endregion
 }
