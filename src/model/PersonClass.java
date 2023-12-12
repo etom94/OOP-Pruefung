@@ -35,6 +35,7 @@ public class PersonClass {
     /**Der Konstruktor: Wurde auf die Pflichteingaben beschränkt, alles andere kann über setter definiert werden.
      * @param firstName  Der Vorname der Person.
      * @param lastName   Der Nachname der Person.
+     *
      * @param yearOfBirth Das Geburtsjahr der Person.
      * @param size       Die Größe der Person in Metern.
      * @param weight     Das Gewicht der Person in Kilogramm.
@@ -157,16 +158,24 @@ public class PersonClass {
         }
     }
 
-    public int getAge() {return age;}
+    public int getAge() {
+        calculateAge();
+        return age;
+    }
 
-    public float getBodyMassIndex() {return bodyMassIndex;}
+    public float getBodyMassIndex() {
+        calculateBMI();
+        return bodyMassIndex;
+    }
     //endregion
 
 
     /**Berechnung und sicherheitsabfragen innerhalb der Klasse*/
     //region Klassen Funktionen und SSicherheitsabfragen
 
-    /**@return gibt das errechnete Alter zurück*/
+    /**
+     * @return gibt das errechnete Alter zurück
+     * */
     private int calculateAge() {
             return java.time.Year.now().getValue() - this.yearOfBirth;
     }
